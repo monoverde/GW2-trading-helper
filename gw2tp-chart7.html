@@ -40,15 +40,20 @@ No history is kept.<br/>
 	//%diff-15 must be greater than this to buy
 	buyThreshold=10; 
 	
+	//time delay between making the async api requests
+	//   and drawing the table with the data we should have gotten back
 	// 3 seconds. shorter didn't seem to work reliably for me
-	// if table does not show,or is blank, make it bigger.
+	// if table does not show,or is blank, wait longer.
 	msWaitTime=3000 
 					
 	//the two api addresses that are used.
 	// easier to change here if they change.
+	// items and their names
 	gw2ItemsAPI="https://api.guildwars2.com/v2/items"
+	//trading post data
 	gw2CommercePricesAPI="https://api.guildwars2.com/v2/commerce/prices"
 
+	//format reminder :)
 	//$.getJSON(url, data, success);
 	
 	//get names to go with the id numbers
@@ -67,7 +72,9 @@ No history is kept.<br/>
 		} //end success
 	); //end get JSON
 
+	//format reminder 
 	//$.getJSON(url, data, success);
+	
 	//get price data from Trading Post
 	salesData=[];
 	$.getJSON(gw2CommercePricesAPI, //url for api
