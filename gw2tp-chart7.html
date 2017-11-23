@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GW2 Common Trades</title>
+  <style>
+	div#settings{float:right;display:none;	}
+  img {
+    height: 100px;
+    float: left;
+  }
+  table { border: 1px solid black;}
+  td {padding:2px;
+  border: 1px solid black;}
+  </style>
+  <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+</head>
+<body>
+<div id="settings">
+<input type="number" default="10" placeholder="BUY threshold" id="inputBUY" name="inputBUY">
+<input type="number" default="3" placeholder="Seconds to wait" id="inputWait" name="inputWait" ><br>
+<input type="text"  default="12535" width="80" placeholder="comma separated item id list."  id="inputIDs" name="inputIDs"> <br><input type="button" name="btnUpdate" id="btnUpdate" label="Update page">
+</div>
+<div id="notes">
+Only shows items from the list where the difference between buy and sell price - 15% BLTC tax is greater than 10%<br/>
+No history is kept.<br/>
+</div>
+<hr>
+<div id="output">Loading...</div>
+<script>
+(function() {
+	//chart 6 - it's working so let's make it customizable
+	
+	//list of items to check
+	// can get them from gw2tp, gw2spidey, maybe the wiki.
+	items="12241,12142,12351,12134,12329,12135,12253,12535,37907,74266,12327,8535"; //veggies
+	items+=",1856,807,171,112,2692,2021,2690,76"; //armor
+	items+=",44980,27952,26405,27007,25992,44977,27020" //weapons
+	
+	//%diff-15 must be greater than this to buy
+	buyThreshold=10; 
+	
+	// 3 seconds. shorter didn't seem to work reliably for me
+	// if table does not show,or is blank, make it bigger.
+	msWaitTime=3000 
+					
+	//the two api addresses that are used.
+	// easier to change here if they change.
+	gw2ItemsAPI="https://api.guildwars2.com/v2/items"
+	gw2CommercePricesAPI="https://api.guildwars2.com/v2/commerce/prices"
+
+	//$.getJSON(url, data, success);
+	
+	//get names to go with the id numbers
+	names=[];
+	$.getJSON(gw2ItemsAPI, 	//url
+		{ids: items},  		//data we pass to the api call
+		function(data){ 	// success function
+			//console.log(data);
+			$.each( data, function( i, id ) {
+				//make list of names and id to match price listing
+				//names[id.id]=id.name; //works
+				temp = [id.id,id.name];
+				names.push(temp);
+			}); //end .each
+		
+		} //end success
+	); //end get JSON
+
+	//$.getJSON(url, data, success);
+	//get price data from Trading Post
+	salesData=[];
+	$.getJSON(gw2CommercePricesAPI, //url for api
+		{ids: items}, 				//data we pass to the api call
+		function(data){  			//success function
+			$.each( data, function( i, id ) {
+				//gather what was returned into easier to use names
+				buy=id.buys.unit_price;
+				sell=id.sells.unit_price;
+				diff = (sell-buy); //difference
+				//diff divided by buy price - 15% 
+				percent=(diff/buy)*100-15
+				//then forced to two decimal places 
+				//   (multiply by 100, force to integer, divide by 100)
+				percent=parseInt(percent*100)/100; 
+				//if percent is greater than the buy threshold, result is BUY else blank
+				recommend = (percent > buyThreshold)?"BUY":"";
+				
+				//push did not like the literal so put in a temp
+				//put all the info into the salesData array
+				let temp=[id.id,sell,buy,diff,percent,recommend];
+				salesData.push(temp);
+			}); //end .each
+		} //end success function
+	); //end getJSON
+
+//delay to make sure evereything is ready
+//	getJSON response is async so rest of the code gets executed 
+// 	while the routine waits in the background
+
+	setTimeout(function(){
+		s="</td><td>";
+		th="<table><tr><th>Name</th><th>sell</th><th>buy</th><th>diff</th><th>diff%-15%</th></tr>"
+		let outString="";
+		//build the table for the page.
+		for(let i=0; i<names.length; i++){
+			//lets not show it if it isn't a BUY
+			if(salesData[i][5]=="BUY"){
+				outString += "<tr><td>"+names[i][1]+s+coinify(salesData[i][1])+s+coinify(salesData[i][2])+s+coinify(salesData[i][3])+s+salesData[i][4]+"</td></tr>";
+			}
+		}
+
+		$("#output").html(th+outString+"</table>");
+	}, msWaitTime);
+	
+	//prices are reported in coppers. 
+	//this shows how many Gold, Silver, and Copper coins
+	//like we're used to seeing. Avoids decimal slip mistakes
+	function coinify(amt){
+		//1g = 100s
+		//1s = 100c
+		//g is integer price / (100*100)
+		let g=Math.floor(amt/10000);
+		//s is integer part of (price - (gold amount in coppers)) / 100c
+		let s=Math.floor((amt-g*10000)/100);
+		//c is amount mod 100
+		let c=amt%100;
+		//return as a string only showing g or s if they are > 0
+		//always show the copper
+		return (g>0?g+"g":"")+" "+(s>0?s+"s":"")+" "+c+"c";
+	}
+})();
+</script>
+ 
+</body>
+</html>
