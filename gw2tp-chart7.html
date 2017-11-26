@@ -17,10 +17,21 @@
 </head>
 <body>
 <div id="settings">
+<!-- not using for now
 <input type="number" default="10" placeholder="BUY threshold" id="inputBUY" name="inputBUY">
 <input type="number" default="3" placeholder="Seconds to wait" id="inputWait" name="inputWait" ><br>
 <input type="text"  default="12535" width="80" placeholder="comma separated item id list."  id="inputIDs" name="inputIDs"> <br><input type="button" name="btnUpdate" id="btnUpdate" label="Update page">
+-->
 </div>
+<div id="buttons">
+<button id="veggies">Veggies</button>
+<button id="exotics">Weapons</button>
+<button id="berserker">Berserker Armor</button>
+<button id="lower">Lower Armor</button>
+<button id="everything">Everything</button>
+</div>
+
+
 <div id="notes">
 Only shows items from the list where the difference between buy and sell price - 15% BLTC tax is greater than 10%<br/>
 No history is kept.<br/>
@@ -33,10 +44,21 @@ No history is kept.<br/>
 	
 	//list of items to check
 	// can get them from gw2tp, gw2spidey, maybe the wiki.
-	items="12241,12142,12351,12134,12329,12135,12253,12535,37907,74266,8535"; //veggies
-	items+=",1856,807,171,112,2692,2021,2690,76"; //armor
-	items+=",44980,27952,26405,27007,25992,44977,27020" //weapons
+
+//old list
+//	items="12241,12142,12351,12134,12329,12135,12253,12535,37907,74266,8535"; //veggies
+//	items+=",1856,807,171,112,2692,2021,2690,76"; //armor
+//	items+=",44980,27952,26405,27007,25992,44977,27020" //weapons
+	array_items = [
+		'2387,27963,27007,27020,44980,27024,27952,44977', //exotics
+		'8535,12535,12329,74266,12253,12351,12135,12246,12241,12144', //food
+		'112,639,171,1328,807,1856,2126,565,2537,2692,76,2021,2690',  //Berserker armor
+		'1516,1970,546,1077,1789,1549,1551,1792,1528,1545,2821,2341,10807' //smaller armor
+	]
 	
+	
+	//default
+	items=array_items[3];
 	//%diff-15 must be greater than this to buy
 	buyThreshold=10; 
 	
@@ -52,74 +74,105 @@ No history is kept.<br/>
 	gw2ItemsAPI="https://api.guildwars2.com/v2/items"
 	//trading post data
 	gw2CommercePricesAPI="https://api.guildwars2.com/v2/commerce/prices"
+	
 
+	document.getElementById("veggies").addEventListener("click", function() {
+		getDetails(array_items[1]);
+	})
+
+	document.getElementById("exotics").addEventListener("click", function() {
+		getDetails(array_items[0]);
+
+	})
+	
+	document.getElementById("berserker").addEventListener("click", function() {
+		getDetails(array_items[2]);
+
+	})
+	
+	document.getElementById("lower").addEventListener("click", function() {
+		getDetails(array_items[3]);
+
+	})
+	
+	document.getElementById("everything").addEventListener("click", function() {
+		for(i in array_items){
+			getDetails(array_items[i]);
+		}
+	})
+	
+	//default is veggies
+	document.getElementById("veggies").click();
 	//format reminder :)
 	//$.getJSON(url, data, success);
-	
-	//get names to go with the id numbers
-	names=[];
-	$.getJSON(gw2ItemsAPI, 	//url
-		{ids: items},  		//data we pass to the api call
-		function(data){ 	// success function
-			//console.log(data);
-			$.each( data, function( i, id ) {
-				//make list of names and id to match price listing
-				//names[id.id]=id.name; //works
-				temp = [id.id,id.name];
-				names.push(temp);
-			}); //end .each
 		
-		} //end success
-	); //end get JSON
+	function getDetails(items){
+		document.getElementById("output").innerHTML="Loading..."
+		//get names to go with the id numbers
+		names=[];
+		$.getJSON(gw2ItemsAPI, 	//url
+			{ids: items},  		//data we pass to the api call
+			function(data){ 	// success function
+				//console.log(data);
+				$.each( data, function( i, id ) {
+					//make list of names and id to match price listing
+					//names[id.id]=id.name; //works
+					temp = [id.id,id.name];
+					names.push(temp);
+				}); //end .each
+			
+			} //end success
+		); //end get JSON
 
-	//format reminder 
-	//$.getJSON(url, data, success);
-	
-	//get price data from Trading Post
-	salesData=[];
-	$.getJSON(gw2CommercePricesAPI, //url for api
-		{ids: items}, 				//data we pass to the api call
-		function(data){  			//success function
-			$.each( data, function( i, id ) {
-				//gather what was returned into easier to use names
-				buy=id.buys.unit_price;
-				sell=id.sells.unit_price;
-				diff = (sell-buy); //difference
-				//diff divided by buy price - 15% 
-				percent=(diff/buy)*100-15
-				//then forced to two decimal places 
-				//   (multiply by 100, force to integer, divide by 100)
-				percent=parseInt(percent*100)/100; 
-				//if percent is greater than the buy threshold, result is BUY else blank
-				recommend = (percent > buyThreshold)?"BUY":"";
-				
-				//push did not like the literal so put in a temp
-				//put all the info into the salesData array
-				let temp=[id.id,sell,buy,diff,percent,recommend];
-				salesData.push(temp);
-			}); //end .each
-		} //end success function
-	); //end getJSON
+		//format reminder 
+		//$.getJSON(url, data, success);
+		
+		//get price data from Trading Post
+		salesData=[];
+		$.getJSON(gw2CommercePricesAPI, //url for api
+			{ids: items}, 				//data we pass to the api call
+			function(data){  			//success function
+				$.each( data, function( i, id ) {
+					//gather what was returned into easier to use names
+					buy=id.buys.unit_price;
+					sell=id.sells.unit_price;
+					diff = (sell-buy); //difference
+					//diff divided by buy price - 15% 
+					percent=(diff/buy)*100-15
+					//then forced to two decimal places 
+					//   (multiply by 100, force to integer, divide by 100)
+					percent=parseInt(percent*100)/100; 
+					//if percent is greater than the buy threshold, result is BUY else blank
+					recommend = (percent > buyThreshold)?"BUY":"";
+					
+					//push did not like the literal so put in a temp
+					//put all the info into the salesData array
+					let temp=[id.id,sell,buy,diff,percent,recommend];
+					salesData.push(temp);
+				}); //end .each
+			} //end success function
+		); //end getJSON
 
-//delay to make sure everything is ready
-//	getJSON response is async so rest of the code gets executed 
-// 	while getJSON waits in the background
+	//delay to make sure everything is ready
+	//	getJSON response is async so rest of the code gets executed 
+	// 	while getJSON waits in the background
 
-	setTimeout(function(){
-		s="</td><td>";
-		th="<table><tr><th>Name</th><th>sell</th><th>buy</th><th>diff</th><th>diff%-15%</th></tr>"
-		let outString="";
-		//build the table for the page.
-		for(let i=0; i<names.length; i++){
-			//lets not show it if it isn't a BUY
-			if(salesData[i][5]=="BUY"){
-				outString += "<tr><td>"+names[i][1]+s+coinify(salesData[i][1])+s+coinify(salesData[i][2])+s+coinify(salesData[i][3])+s+salesData[i][4]+"</td></tr>";
+		setTimeout(function(){
+			s="</td><td>";
+			th="<table><tr><th>Name</th><th>sell</th><th>buy</th><th>diff</th><th>diff%-15%</th></tr>"
+			let outString="";
+			//build the table for the page.
+			for(let i=0; i<names.length; i++){
+				//lets not show it if it isn't a BUY
+				if(salesData[i][5]=="BUY"){
+					outString += "<tr><td>"+names[i][1]+s+coinify(salesData[i][1])+s+coinify(salesData[i][2])+s+coinify(salesData[i][3])+s+salesData[i][4]+"</td></tr>";
+				}
 			}
-		}
 
-		$("#output").html(th+outString+"</table>");
-	}, msWaitTime);
-	
+			$("#output").html(th+outString+"</table>");
+		}, msWaitTime);
+	} //end getDetails
+
 	//prices are reported in coppers. 
 	//this shows how many Gold, Silver, and Copper coins
 	//like we're used to seeing. Avoids decimal slip mistakes
