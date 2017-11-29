@@ -10,7 +10,6 @@
     float: left;
   }
   table { border: 1px solid black;}
-  tr.greenbar {background-color: lightblue;}
   td {padding:2px;
   border: 1px solid black;}
   </style>
@@ -158,27 +157,15 @@ No history is kept.<br/>
 	//	getJSON response is async so rest of the code gets executed 
 	// 	while getJSON waits in the background
 
-		//TODO add green bar effect
 		setTimeout(function(){
 			s="</td><td>";
 			th="<table><tr><th>Name</th><th>sell</th><th>buy</th><th>diff</th><th>diff%-15%</th></tr>"
 			let outString="";
-			let greenbar= -1;
 			//build the table for the page.
 			for(let i=0; i<names.length; i++){
 				//lets not show it if it isn't a BUY
 				if(salesData[i][5]=="BUY"){
-					greenbar = (greenbar + 1) % 6;
-					
-					outString += "<tr " 
-					outString += (greenbar<3)?" class=\"greenbar\" ":"" 
-					outString += "><td>"
-					console.log("<tr " + ((greenbar<3)?" class=\"greenbar\" ":"") + "><td>");
-						console.log("<h1>Fred</h1>");
-					//outString += +names[i][1]+s+coinify(salesData[i][1])
-					outString += s+coinify(salesData[i][2])
-					outString += s+coinify(salesData[i][3])
-					outString += s+salesData[i][4]+"</td></tr>";
+					outString += "<tr><td>"+names[i][1]+s+coinify(salesData[i][1])+s+coinify(salesData[i][2])+s+coinify(salesData[i][3])+s+salesData[i][4]+"</td></tr>";
 				}
 			}
 
@@ -192,16 +179,12 @@ No history is kept.<br/>
 	function coinify(amt){
 		//1g = 100s
 		//1s = 100c
-
 		//g is integer price / (100*100)
 		let g=Math.floor(amt/10000);
-		
 		//s is integer part of (price - (gold amount in coppers)) / 100c
 		let s=Math.floor((amt-g*10000)/100);
-		
 		//c is amount mod 100
 		let c=amt%100;
-		
 		//return as a string only showing g or s if they are > 0
 		//always show the copper
 		return (g>0?g+"g":"")+" "+(s>0?s+"s":"")+" "+c+"c";
