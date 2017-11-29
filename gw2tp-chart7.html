@@ -4,12 +4,13 @@
   <meta charset="utf-8">
   <title>GW2 Common Trades</title>
   <style>
-	div#settings{float:right;display:none;	}
+  div#settings{float:right;display:none;	}
   img {
     height: 100px;
     float: left;
   }
   table { border: 1px solid black;}
+  tr.greenbar {background-color: rgb(197, 234, 245);}
   td {padding:2px;
   border: 1px solid black;}
   </style>
@@ -50,8 +51,8 @@ No history is kept.<br/>
 //	items+=",1856,807,171,112,2692,2021,2690,76"; //armor
 //	items+=",44980,27952,26405,27007,25992,44977,27020" //weapons
 	array_items = [
-		'2387,27963,27007,27020,44980,27024,27952,44977', //exotics
 		'8535,12535,12329,74266,12253,12351,12135,12246,12241,12144', //food
+		'2387,27963,27007,27020,44980,27024,27952,44977', //exotics
 		'112,639,171,1328,807,1856,2126,565,2537,2692,76,2021,2690',  //Berserker armor
 		'1516,1970,546,1077,1789,1549,1551,1792,1528,1545,2821,2341,10807' //smaller armor
 	]
@@ -77,11 +78,11 @@ No history is kept.<br/>
 	
 
 	document.getElementById("veggies").addEventListener("click", function() {
-		getDetails(array_items[1]);
+		getDetails(array_items[0]);
 	})
 
 	document.getElementById("exotics").addEventListener("click", function() {
-		getDetails(array_items[0]);
+		getDetails(array_items[1]);
 
 	})
 	
@@ -161,11 +162,15 @@ No history is kept.<br/>
 			s="</td><td>";
 			th="<table><tr><th>Name</th><th>sell</th><th>buy</th><th>diff</th><th>diff%-15%</th></tr>"
 			let outString="";
+			let glines=-1
 			//build the table for the page.
 			for(let i=0; i<names.length; i++){
 				//lets not show it if it isn't a BUY
 				if(salesData[i][5]=="BUY"){
-					outString += "<tr><td>"+names[i][1]+s+coinify(salesData[i][1])+s+coinify(salesData[i][2])+s+coinify(salesData[i][3])+s+salesData[i][4]+"</td></tr>";
+					glines = (glines + 1) %6
+					outString += "<tr"
+					outString += (glines<3)?" class=greenbar":""
+					outString += "><td>"+names[i][1]+s+coinify(salesData[i][1])+s+coinify(salesData[i][2])+s+coinify(salesData[i][3])+s+salesData[i][4]+"</td></tr>";
 				}
 			}
 
