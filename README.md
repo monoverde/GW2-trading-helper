@@ -5,4 +5,5 @@ Only shows profitable items, others not displayed.
 
 ## upcoming features
 Easier list editing in the works
+
 greenbar effect on tables
