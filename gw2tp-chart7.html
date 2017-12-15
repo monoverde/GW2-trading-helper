@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>GW2 Common Trades</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pavilion/2.0.3/pavilion.min.css" />
+  <!-- meta name="viewport" content="width=device-width, initial-scale=1" -->
   <style>
   div#settings{float:right;display:none;	}
   img {
@@ -33,6 +35,10 @@
 	<button id="everything">Everything</button>
 </div>
 
+<div id="options">
+	<input type="checkbox"	>
+	Show Debug info
+</div>
 
 <div id="notes">
 Only shows items from the list where the difference between buy and sell price - 15% BLTC tax is greater than 10%<br/>
@@ -56,14 +62,14 @@ No history is kept.<br/>
 		'2387,27963,27007,27020,44980,27024,27952,44977', //exotics
 		'112,639,171,1328,807,1856,2126,565,2537,2692,76,2021,2690',  //Berserker armor
 		'1516,1970,546,1077,1789,1549,1551,1792,1528,1545,2821,2341,10807', //smaller armor
-		'24332,24331,24291,24292,24272,24353,24285,24279,24281,24286,24884,38130,83757,80791,24316,24301,24326,24336,24337,24312,42010,24516,24522,24298,48805'// experimental sales
+		'46736,24332,24331,24291,24272,24353,24285,24279,83757,80791,24316,24326,24336,24337,24312'// experimental sales
 	]
 	
 	//DEBUG options
 	// had to keep changing these in code so added flags here.
 	// normal operation is all false.
 	showID = true; //show item ID in output. handy for rearranging.
-	showBUY = true; //show BUY column 
+	showBUY = false; //show BUY column 
 	showALL = true; //show all items regardless of BUY status
 
 	//default
