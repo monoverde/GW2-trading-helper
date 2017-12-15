@@ -14,7 +14,7 @@
   td {padding:2px;
   border: 1px solid black;}
   </style>
-  <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
 <div id="settings">
@@ -62,12 +62,13 @@ No history is kept.<br/>
 	//DEBUG options
 	// had to keep changing these in code so added flags here.
 	// normal operation is all false.
-	showID = false; //show item ID in output. handy for rearranging.
-	showBUY = false; //show BUY column 
-	showALL = false; //show all items regardless of BUY status
+	showID = true; //show item ID in output. handy for rearranging.
+	showBUY = true; //show BUY column 
+	showALL = true; //show all items regardless of BUY status
 
 	//default
 	items=array_items[3];
+	
 	//%diff-15 must be greater than this to buy
 	buyThreshold=10; 
 	
@@ -179,7 +180,7 @@ No history is kept.<br/>
 			//build the table for the page.
 			for(let i=0; i<names.length; i++){
 				//lets not show it if it isn't a BUY
-				if(salesData[i][5]=="BUY" || showALL){
+				if((salesData[i][5]=="BUY") || showALL){
 					glines = (glines + 1) %6
 					outString += "<tr"
 					outString += (glines<3)?" class=greenbar":""
