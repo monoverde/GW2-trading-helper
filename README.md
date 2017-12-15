@@ -7,3 +7,5 @@ Only shows profitable items, others not displayed.
 Easier list editing in the works
 
 greenbar effect on tables
+
+added a button and category for items I'm experimenting with
