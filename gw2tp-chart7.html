@@ -36,12 +36,12 @@
 </div>
 
 <div id="options">
-	<input type="checkbox"	>
-	Show Debug info
+	<input type="checkbox" id="showDebug"	>
+	Show Debug info (if checked, show all, show BUY status, show ID)
 </div>
 
 <div id="notes">
-Only shows items from the list where the difference between buy and sell price - 15% BLTC tax is greater than 10%<br/>
+Only shows items from the list where the difference between buy and sell price - 15% BLTC tax is greater than 10%.<br/>
 No history is kept.<br/>
 </div>
 <hr>
@@ -68,9 +68,9 @@ No history is kept.<br/>
 	//DEBUG options
 	// had to keep changing these in code so added flags here.
 	// normal operation is all false.
-	showID = true; //show item ID in output. handy for rearranging.
+	showID = false; //show item ID in output. handy for rearranging.
 	showBUY = false; //show BUY column 
-	showALL = true; //show all items regardless of BUY status
+	showALL = false; //show all items regardless of BUY status
 
 	//default
 	items=array_items[3];
@@ -122,12 +122,19 @@ No history is kept.<br/>
 		}
 	})
 	
+	document.getElementById("showDebug").addEventListener("checked", function() {
+		showID = true; //show item ID in output. handy for rearranging.
+		showBUY = true; //show BUY column 
+		showALL = true; //show all items regardless of BUY status
+	})
+
 	//default is veggies
 	document.getElementById("experimental").click();
 	//format reminder :)
 	//$.getJSON(url, data, success);
 		
 	function getDetails(items){
+		setDebugOptions()
 		document.getElementById("output").innerHTML="Loading..."
 		//get names to go with the id numbers
 		names=[];
@@ -217,6 +224,15 @@ No history is kept.<br/>
 		//always show the copper
 		return (g>0?g+"g":"")+" "+(s>0?s+"s":"")+" "+c+"c";
 	}
+
+	function setDebugOptions(){
+	    let temp = document.getElementById("showDebug").checked
+		showID = temp; //show item ID in output. handy for rearranging.
+		showBUY = temp //show BUY column 
+		showALL = temp; //show all items regardless of BUY status
+	}
+
+
 })();
 </script>
  
