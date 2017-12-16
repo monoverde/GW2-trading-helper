@@ -23,7 +23,8 @@
 <!-- not using for now
 <input type="number" default="10" placeholder="BUY threshold" id="inputBUY" name="inputBUY">
 <input type="number" default="3" placeholder="Seconds to wait" id="inputWait" name="inputWait" ><br>
-<input type="text"  default="12535" width="80" placeholder="comma separated item id list."  id="inputIDs" name="inputIDs"> <br><input type="button" name="btnUpdate" id="btnUpdate" label="Update page">
+<input type="text"  default="12535" width="80" placeholder="comma separated item id list."  id="inputIDs" name="inputIDs"> <br>
+
 -->
 </div>
 <div id="buttons">
@@ -35,14 +36,15 @@
 	<button id="everything">Everything</button>
 </div>
 
-<div id="options">
-	<input type="checkbox" id="showDebug"	>
-	Show Debug info (if checked, show all, show BUY status, show ID)
-</div>
-
 <div id="notes">
 Only shows items from the list where the difference between buy and sell price - 15% BLTC tax is greater than 10%.<br/>
 No history is kept.<br/>
+</div>
+
+<div id="options">
+	<input type="checkbox" id="showDebug"	>
+	 Show all item. Show BUY status. Show ID.<br />
+	Takes effect of next button press.
 </div>
 <hr>
 <div id="output">Loading...</div>
@@ -122,18 +124,13 @@ No history is kept.<br/>
 		}
 	})
 	
-	document.getElementById("showDebug").addEventListener("checked", function() {
-		showID = true; //show item ID in output. handy for rearranging.
-		showBUY = true; //show BUY column 
-		showALL = true; //show all items regardless of BUY status
-	})
-
 	//default is veggies
 	document.getElementById("experimental").click();
 	//format reminder :)
 	//$.getJSON(url, data, success);
 		
 	function getDetails(items){
+		//
 		setDebugOptions()
 		document.getElementById("output").innerHTML="Loading..."
 		//get names to go with the id numbers
@@ -187,7 +184,10 @@ No history is kept.<br/>
 
 		setTimeout(function(){
 			s="</td><td>";
-			th="<table><tr><th>Name</th><th>sell</th><th>buy</th><th>diff</th><th>diff%-15%</th></tr>"
+			th="<table><tr><th>Name</th><th>sell</th><th>buy</th><th>diff</th><th>diff%-15%</th>"
+			th += showBUY?"<th>status</th>":"";
+			th += showID?"<th>ID</th>":"";
+			th+="</tr>"
 			let outString="";
 			let glines=-1
 			//build the table for the page.
