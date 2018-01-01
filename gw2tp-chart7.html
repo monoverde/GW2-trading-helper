@@ -28,7 +28,7 @@
 -->
 </div>
 <div id="buttons">
-	<button id="veggies">Veggies</button>
+	<button id="veggies">Commodities</button>
 	<button id="exotics">Weapons</button>
 	<button id="berserker">Berserker Armor</button>
 	<button id="lower">Lower Armor</button>
@@ -60,11 +60,11 @@ No history is kept.<br/>
 //	items+=",1856,807,171,112,2692,2021,2690,76"; //armor
 //	items+=",44980,27952,26405,27007,25992,44977,27020" //weapons
 	array_items = [
-		'8535,12535,12329,74266,12253,12351,12135,12246,12241,12144', //food
+		'8535,12535,12329,12253,12351,12135,12246,12241,83757,24285', //food
 		'2387,27963,27007,27020,44980,27024,27952,44977', //exotics
-		'112,639,171,1328,807,1856,2126,565,2537,2692,2021,2690',  //Berserker armor
+		'112,639,171,1328,807,1856,2126,565,2537,2692,2021',  //Berserker armor
 		'1516,1970,546,1077,1789,1549,1551,1528,1545,2821,2341,10807', //smaller armor
-		'84688,83261,83306,24332,24331,24353,24285,24279,83757,80791,24316,24326,24337,24312'// experimental sales
+		'84688,83261,83306,24332,24331,24353,24279,80791,24316,24326,24337,24312'// experimental sales
 	]
 	
 	//DEBUG options
@@ -125,7 +125,7 @@ No history is kept.<br/>
 	})
 	
 	//default is veggies
-	document.getElementById("veggies").click();
+	$("#veggies").click();
 	//format reminder :)
 	//$.getJSON(url, data, success);
 		
