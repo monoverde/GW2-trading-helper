@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GW2 BLTC ready for pickup</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pavilion/2.0.3/pavilion.min.css" />
+  <!-- meta name="viewport" content="width=device-width, initial-scale=1" -->
+  <style>
+  div#settings{float:right;display:none;	}
+  img {
+    height: 100px;
+    float: left;
+  }
+  table { border: 1px solid black;}
+  tr.greenbar {background-color: rgb(197, 234, 245);}
+  td {padding:2px;
+  border: 1px solid black;}
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="output"> Nothing Yet.</div>
+<script>
+(function() {
+	//time delay between making the async api requests
+	//   and drawing the table with the data we should have gotten back
+	// 3 seconds. shorter didn't seem to work reliably for me
+	// if table does not show,or is blank, wait longer.
+	msWaitTime=3000 
+					
+	//the two api addresses that are used.
+	// easier to change here if they change.
+	// items and their names
+	gw2ItemsAPI="https://api.guildwars2.com/v2/items"
+	gw2CommercePricesAPI="https://api.guildwars2.com/v2/commerce/prices"
+	gw2CommerceDeliveryAPI="https://api.guildwars2.com/v2/commerce/delivery"
+    gw2HistoryAPI = 'https://api.guildwars2.com/v2/commerce/transactions/history'
+	
+    //format reminder :)
+	//$.getJSON(url, data, success);
+		$("#output").html("Loading...");
+		$.getJSON(gw2CommerceDeliveryAPI, 	//url
+			{"access_token":"0A785BED-2CBA-7E41-BCEE-D8BC7C1F829546663221-97E7-4DEA-A1DD-08A0A667E5FB"},
+              		//data we pass to the api call
+			function(data){ 	// success function
+				console.log(data)
+                $("#output").html(JSON.stringify(data))
+			} //end success
+		); //end get JSON
+
+
+
+})();
+</script>
+ 
+</body>
+</html>

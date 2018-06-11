@@ -29,6 +29,11 @@
 </div>
 <div id="buttons">
 	<button id="veggies">Commodities</button>
+	<button id="exotics">Weapons</button>
+	<button id="berserker">Berserker Armor</button>
+	<button id="lower">Lower Armor</button>
+	<button id="experimental">Experimental</button>
+	<button id="everything">Everything</button>
 </div>
 
 <div id="notes">
@@ -55,7 +60,11 @@ No history is kept.<br/>
 //	items+=",1856,807,171,112,2692,2021,2690,76"; //armor
 //	items+=",44980,27952,26405,27007,25992,44977,27020" //weapons
 	array_items = [
-		'12535,12329,12253,12351,12135,12241' //food
+		'8535,12535,12329,12253,12351,12135,12246,12241,83757,24285', //food
+		'2387,27963,27007,27020,44980,27024,27952,44977', //exotics
+		'112,639,171,1328,807,1856,2126,565,2537,2692,2021',  //Berserker armor
+		'1516,1970,546,1077,1789,1549,1551,1528,1545,2821,2341,10807', //smaller armor
+		'84688,83261,83306,24332,24331,24353,24279,80791,24316,24326,24337,24312'// experimental sales
 	]
 	
 	//DEBUG options
@@ -85,14 +94,35 @@ No history is kept.<br/>
 	gw2CommercePricesAPI="https://api.guildwars2.com/v2/commerce/prices"
 	
 
-	$("#veggies").on("click", function() {
+	document.getElementById("veggies").addEventListener("click", function() {
 		getDetails(array_items[0]);
 	})
 
-	$("showDebug").on("changed", function(){
-		getDetails(array_items[0]);
+	document.getElementById("exotics").addEventListener("click", function() {
+		getDetails(array_items[1]);
+
 	})
 	
+	document.getElementById("berserker").addEventListener("click", function() {
+		getDetails(array_items[2]);
+
+	})
+	
+	document.getElementById("lower").addEventListener("click", function() {
+		getDetails(array_items[3]);
+
+	})
+	
+	document.getElementById("experimental").addEventListener("click", function() {
+		getDetails(array_items[4]);
+
+	})
+	
+	document.getElementById("everything").addEventListener("click", function() {
+		for(i in array_items){
+			getDetails(array_items[i]);
+		}
+	})
 	
 	//default is veggies
 	$("#veggies").click();
@@ -102,8 +132,7 @@ No history is kept.<br/>
 	function getDetails(items){
 		//
 		setDebugOptions()
-		$("#output").html("Loading...");
-		
+		document.getElementById("output").innerHTML="Loading..."
 		//get names to go with the id numbers
 		names=[];
 		$.getJSON(gw2ItemsAPI, 	//url
