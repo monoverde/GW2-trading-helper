@@ -1,0 +1,24 @@
+<html>
+<div id="outputArea">
+loading....
+</div id="second">
+empty...
+<div>
+
+</div>
+<script>
+//
+//
+api_key="0A785BED-2CBA-7E41-BCEE-D8BC7C1F829546663221-97E7-4DEA-A1DD-08A0A667E5FB"
+//
+//
+
+
+fetch(`https://api.guildwars2.com/v2/commerce/delivery?v=latest&access_token=${api_key}`)
+.then((r) => temp=r.json())
+.then((data)  => (document.getElementById("outputArea").innerHTML=JSON.stringify(data)))
+
+//document.getElementById("second").innerHTML=JSON.stringify(data["coins"])
+
+</script>
+</html>
