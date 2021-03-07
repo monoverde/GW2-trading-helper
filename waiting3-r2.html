@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GW2 BLTC ready for pickup</title>
+  
+  <!-- style sheet to look nicer --> 
+  <style type="text/css">
+  	body {
+		  	margin:40px auto;
+  			max-width:650px;
+			line-height:1.6;
+			font-size:18px;
+			color:#444;
+			padding:0 10pxl;
+			font-family: Arial, Helvetica, sans-serif;
+			background-color: #EEEEEE;
+		}
+	h1,h2,h3 { line-height:1.2;	}
+	table, tr, td {border : 1px solid black;  text-align : right;}
+	</style>
+	 
+  <!-- meta name="viewport" content="width=device-width, initial-scale=1" -->
+  
+ </head>
+<body>
+    <div id="output"> Loading from all accounts</div>
+    <div id="Routput"> </div>
+
+    <!-- development -->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!-- production -->
+    <!-- 
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script> 
+    -->
+<script>
+	ce = React.createElement			
+	//the api address that is used.
+	// easier to change here if they change the API again.
+	const gw2CommerceDeliveryAPI="https://api.guildwars2.com/v2/commerce/delivery"
+	apiKey = 
+	userNamesAndAPI = [
+		 {"name":"Thromos",
+		  "APIKey":"0A785BED-2CBA-7E41-BCEE-D8BC7C1F829546663221-97E7-4DEA-A1DD-08A0A667E5FB"}, //comma
+
+		 {"name":"Muleacct",
+		 "APIKey":"D696CB97-F2B4-C646-BDC5-D9D089B0456668388B6B-5F52-4531-9ECB-C06456B22983"}, //comma
+
+		 {"name":"Fourth",
+		 "APIKey":"17C9AEB0-00C2-AF44-9F92-DE201A9E06F651B2B409-4E13-4EBB-90AA-0B278ECB8D3D"}, //comma
+
+		 {"name":"Wednesday",
+		 "APIKey":"9E7DFCEB-649E-D14A-95A5-0784210D499FA1AA4AD2-8F28-4BA2-A082-009B3825C006"}, //no comma after the last entry
+	]
+// check Fetch API
+	out = document.getElementById('output')
+	var auction = ""
+	output.innerHTML = auction
+
+	function coinSort(coins){
+		var gold = parseInt(coins/10000)
+		var copper = coins % 100
+		var silver = parseInt(coins / 100) %100
+		return (gold>0?gold+"G":"")+" "+(silver>0?silver+"S":"")+" "+copper+"C";
+	}	
+
+	Object.values(userNamesAndAPI).forEach(value=>{
+
+		async function fetchText() {
+			let response = await fetch(`${gw2CommerceDeliveryAPI}?v=latest&access_token=${value.APIKey}`);
+			return data = await response.json();
+		}		
+
+		async function renderItems() {
+			let inventory = await fetchText()
+            
+            auction += `<hr> ${value.name} `
+			auction += `<br> ${coinSort(inventory.coins)} coins <table><tr><th>Qty</th><th>Item</th></tr>`
+
+			const temp = inventory.items.map(id => auction += `<tr><td>${id.count} </td> <td>${id.id} </td></tr>`)
+
+			auction += `</table>`
+			output.innerHTML += auction
+			auction = ""
+
+			return inventory
+		}
+
+		const fred = renderItems()
+		console.log(fred)
+	});
+ReactDOM.render(ce('hr'),document.getElementById('Routput'))
+</script>
+ 
+</body>
+</html>

@@ -1,0 +1,55 @@
+<div id="output"> Loading from all accounts</div>
+<hr />
+<div id="test-out">Empty</div>
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+
+    <!-- Load our React component. -->
+<script>
+
+'use strict';
+
+const e = React.createElement;
+const domContainer = document.getElementById('test-out');
+//const[name,setName] = React.useState("Dave")
+class Hello extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { name: "Fred" };
+  }
+
+  render() {
+    return React.createElement(
+      'div',
+      null,
+      `Hello ${this.state.name}`
+    );
+  }
+}
+
+const name = "Dave"
+const Hi = e(
+  "div" ,
+  {name : "Sally"} ,
+  `Hi ${name}`
+)
+
+// const Hi2 = ({name}) => {
+//   return <div>Hi2 {name}</div>
+// }
+
+const Output = e(
+  "div",
+	{},
+	[
+  e(Hello) ,
+  Hi
+  
+  ]
+)
+
+ReactDOM.render(Output, domContainer);
+
+</script>
