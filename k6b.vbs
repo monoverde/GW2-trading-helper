@@ -172,7 +172,7 @@ for ip=1 to progsize
                 ' blank line after a loop
                 PrintString ""
                 
-            ' write character to stdout
+            ' write string to stdout
             case "?"
                 ip=ip+1
                 while Mid(ProgramCode,ip,1)<>"?"
