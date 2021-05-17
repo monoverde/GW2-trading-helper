@@ -93,39 +93,25 @@ No history is kept.<br/>
 	//trading post data
 	gw2CommercePricesAPI="https://api.guildwars2.com/v2/commerce/prices"
 	
+	document.getElementById("buttons").addEventListener("click", function() {
 
-	document.getElementById("veggies").addEventListener("click", function() {
-		getDetails(array_items[0]);
-	})
-
-	document.getElementById("exotics").addEventListener("click", function() {
-		getDetails(array_items[1]);
-
-	})
+		if( event.target == document.getElementById("veggies")){getDetails(array_items[0]);}
+		if( event.target == document.getElementById("exotics")){getDetails(array_items[1]);}
+		if( event.target == document.getElementById("berserker")){getDetails(array_items[2]);}
+		if( event.target == document.getElementById("lower")){getDetails(array_items[3]);}
+		if( event.target == document.getElementById("experimental")){getDetails(array_items[4]);}
 	
-	document.getElementById("berserker").addEventListener("click", function() {
-		getDetails(array_items[2]);
-
-	})
-	
-	document.getElementById("lower").addEventListener("click", function() {
-		getDetails(array_items[3]);
-
-	})
-	
-	document.getElementById("experimental").addEventListener("click", function() {
-		getDetails(array_items[4]);
-
-	})
-	
-	document.getElementById("everything").addEventListener("click", function() {
-		for(i in array_items){
-			getDetails(array_items[i]);
+		if( event.target == document.getElementById("everything")){
+			for(i in array_items){
+	 			getDetails(array_items[i]);
+	 		}
 		}
 	})
-	
+
 	//default is veggies
-	$("#veggies").click();
+	//$("#veggies").click();
+	getDetails(array_items[0]);
+
 	//format reminder :)
 	//$.getJSON(url, data, success);
 		
