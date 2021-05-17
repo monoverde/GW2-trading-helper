@@ -164,16 +164,19 @@ No history is kept.<br/>
 			} //end success function
 		); //end getJSON
 
-	//delay to make sure everything is ready
+		console.log(salesData)
+
+
+		//delay to make sure everything is ready
 	//	getJSON response is async so rest of the code gets executed 
 	// 	while getJSON waits in the background
 
 		setTimeout(function(){
-			s="</td><td>";
-			th="<table><tr><th>Name</th><th>sell</th><th>buy</th><th>diff</th><th>diff%-15%</th>"
+			s= "</td><td>";
+			th= "<table><tr><th>Name</th><th>sell</th><th>buy</th><th>diff</th><th>diff%-15%</th>"
 			th += showBUY?"<th>status</th>":"";
 			th += showID?"<th>ID</th>":"";
-			th+="</tr>"
+			th += "</tr>"
 			let outString="";
 			let glines=-1
 			//build the table for the page.
@@ -181,13 +184,15 @@ No history is kept.<br/>
 				//lets not show it if it isn't a BUY or showALL is set
 				if((salesData[i][5]=="BUY") || showALL){
 					glines = (glines + 1) %6
-					outString += "<tr"
-					outString += (glines<3)?" class=greenbar":""
-					outString += "><td>"+names[i][1]+s+coinify(salesData[i][1])+s+coinify(salesData[i][2])
-					outString += s+coinify(salesData[i][3])+s+salesData[i][4]
-					outString += showBUY?s+salesData[i][5]:"";
-					outString += showID?s+names[i][0]:"";
-					outString += "</td></tr>";
+					outString += `<tr ${(glines<3)?"class=greenbar":""} >
+					 <td> ${names[i][1]}
+					 ${s+coinify(salesData[i][1])} 
+					 ${s+coinify(salesData[i][2])}
+					 ${s+coinify(salesData[i][3])}
+					 ${s+salesData[i][4]} 
+					 ${showBUY?s+salesData[i][5]:""}
+					 ${showID?s+names[i][0]:""}
+					</td></tr> `
 				}
 			}
 			
