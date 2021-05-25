@@ -1,0 +1,46 @@
+The GERS people have used this setup several times so 
+they are familiar with the process.
+-Kevin
+
+
+Adapted from "Basic Principles of Printing in Solaris 2.6 and Above"
+
+    A Basic Print Filter 
+
+    The following shows the filter setup to print the checks on your printer.
+    
+    1. Create the filter script in a suitable directory, for example: /opt/local/bin:
+
+		#!/bin/ksh
+		#
+		# /opt/local/bin/check.sh
+		#
+		echo "%!PS-Adobe-2.0"
+		echo "(A_P01) run A_P01"
+		cat -
+		echo "\004"
+
+    Remember to make this script executable; permissions 755 should be sufficient.
+
+    2. Create the filter definition file /etc/lp/fd/check.fd. Be careful to preserve all spaces within this file:
+
+    Input types: any
+    Output types: check
+    Printer types: any
+    Printers: any
+    Filter type: slow
+    Command: /opt/local/bin/check.sh
+
+    3. Register the filter with the lp subsystem:
+
+    # lpfilter -f check -F /etc/lp/fd/check.fd
+
+    The -f field needs to match the "output types" entry in the *.fd file.
+
+    4. Create a queue with this content type:
+
+    # lpadmin -p checks -o protocol=tcp,dest=<printer-IP>:9100 -v /dev/null -m netstandard -T unknown -I check
+    # enable checks ; accept checks
+
+    This will create a queue (checks) to a printer (which can interpret PS) to print a file as a check.
+

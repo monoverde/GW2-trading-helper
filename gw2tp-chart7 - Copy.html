@@ -109,12 +109,15 @@ No history is kept.<br/>
 	})
 
 	//default is veggies
-	//$("#veggies").click();
-	getDetails(array_items[0]);
-
+	document.getElementById("veggies").click();
+	
 	//format reminder :)
 	//$.getJSON(url, data, success);
-		
+	async function fetchText() {
+			let response = await fetch(`${gw2ItemsAPI}?v=latest&access_token=${value.APIKey}`);
+			return data = await response.json();
+	}
+
 	function getDetails(items){
 		//
 		setDebugOptions()
