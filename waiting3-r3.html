@@ -72,28 +72,30 @@
 			let response = await fetch(`${gw2CommerceDeliveryAPI}?v=latest&access_token=${value.APIKey}`);
 			return data = await response.json();
 		}		
-
+		async function  getName(itemId) {
+			return await fetch(`${gw2ItemsAPI}?v=latest\&id=${itemId}`)
+			.then((r) => r.json())
+			.then((data) => console.log(data.name))
+	}
 		async function renderItems() {
 			let inventory = await fetchText()
-            console.log(inventory.coins)
+            
             auction += `<hr> ${value.name} `
 			auction += `<br> ${coinSort(inventory.coins)} coins <table><tr><th>Qty</th><th>Item</th></tr>`
 
-			const temp = inventory.items.map(id => auction += `<tr><td>${id.count} </td> <td>${id.id} </td></tr>`)
+			const temp = inventory.items.map(id => auction += `<tr><td>${id.count} </td> <td>${id.id} </td> <td>${getName(id.id)} </td></tr>`)
 
 			auction += `</table>`
-//			output.innerHTML += auction
+			output.innerHTML += auction
 			auction = ""
 
-//			return inventory
-			return auction
+			return inventory
 		}
 
-		const Fred = renderItems()
-		console.log(Fred)
-
+		const fred = renderItems()
+		console.log(fred)
 	});
-ReactDOM.render(ce('Fred'),document.getElementById('Routput'))
+ReactDOM.render(ce('hr'),document.getElementById('Routput'))
 </script>
  
 </body>
